@@ -1,0 +1,27 @@
+#header {
+    margin: 1em 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#logout-link {
+    float: right;
+}
+
+@media(min-width: 1680px) {
+    #container,#footer {
+        width: 1280px;
+    }
+}
+
+nav {
+    margin: 1em 0;
+}
+
+.indent {
+    margin-left: 1em;
+}
+
+.table-hover tbody tr:hover {
+    cursor: pointer;
+}

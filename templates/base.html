@@ -23,7 +23,7 @@
                     | <a {% if name != 'login' %}href="/login"{% endif %}>Login</a>
                 {% else %}
                      <a {% if name != 'view_logs' %}href="/view_logs"{% endif %}>View Logs</a>
-                    | <a {% if name != 'log_data' %}href="/log_data"{% endif %}>Log Data</a>
+                    | <a {% if name != 'enter_data' %}href="/enter_data"{% endif %}>Enter Data</a>
                     | <a {% if name != 'settings' %}href="/settings"{% endif %}>Settings</a>
                 {% endif %}
             </nav>
@@ -37,7 +37,9 @@
     </div>
     <div id="footer" class="container">
     {% if current_user.is_authenticated %}
-        Logged in as {{ current_user.email }} | <a id="logout-link" href="/logout">Logout</a>
+        <div id="logout-bar">
+            Logged in as {{ current_user.email }} | <a href="/logout">Logout</a>
+        </div>
     {% endif %}
     </div>
 </body>

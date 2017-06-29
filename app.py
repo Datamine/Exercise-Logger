@@ -6,30 +6,44 @@ from flask_bootstrap import Bootstrap
 
 from auth import login_manager
 from forms import LoginForm, RegistrationForm
-from models import User
+from models import User, Swimming
 from db_connect import session
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = environ['CSRF_TOKEN']
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager.init_app(app)
-
 Bootstrap(app)
+
 
 @app.route('/view_logs')
 @login_required
 def view_logs():
-    pass
+    exercises = [
+        Swimming
+    ]
 
-@app.route('/')
-def index():
-    return redirect('/log_data')
+    exercise_list = []
 
-@app.route('/log_data')
+    for e in exercises:
+        exercise_list.extend(session.query(e).filter(e.user_id==current_user.id).all())
+
+    return render_template(
+        'view_logs.html',
+        title='View Logs',
+        name='view_logs',
+        data=exercise_list
+    )
+
+
+
+@app.route('/enter_data')
 @login_required
-def log_data():
+def enter_data():
     return 'foo'
+
 
 @app.route('/settings')
 @login_required
@@ -40,6 +54,7 @@ def settings():
     # let them delete account
     # let them set new password/email
     return 'foo'
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -61,6 +76,7 @@ def register():
         form=form
     )
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -81,10 +97,17 @@ def login():
 
 
 @login_required
+@app.route('/logout')
 def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect('/login')
+
+
+@app.route('/')
+def index():
+    return redirect('/enter_data')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

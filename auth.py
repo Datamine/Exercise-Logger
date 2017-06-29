@@ -2,6 +2,9 @@ from flask import render_template, redirect, flash
 from flask_login import LoginManager, login_user, logout_user, login_required
 
 from forms import LoginForm, RegistrationForm
+from models import User
+from db_connect import session
+
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -39,7 +42,6 @@ def login():
         user = session.query(User).filter(User.email == form.email.data).first()
         if (not user is None) and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
-            # there are probably more useful/granular redirects I can use here
             return redirect('/')
         else:
             flash('Invalid username or password.')

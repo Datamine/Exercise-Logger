@@ -1,4 +1,5 @@
-from app import Exercise, User, db
+from db_connect import session, engine
+from models import Base
 
-db.drop_all()
-db.create_all()
+Base.metadata.drop_all(engine)
+Base.metadata.create_all(engine)

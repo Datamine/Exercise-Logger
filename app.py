@@ -1,37 +1,25 @@
 from os import environ
+
+from flask_login import current_user, login_required
 from flask import Flask, render_template, redirect
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from auth import login_manager
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
-app.config['SECRET_KEY'] = environ['CSRF_KEY']
+app.config['SECRET_KEY'] = environ['CSRF_TOKEN']
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+login_manager.init_app(app)
+
 Bootstrap(app)
-db = SQLAlchemy(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, nullable=False)
-    password_hash = db.Column(db.String, nullable=False)
+@login_required
+@app.route('/enter_data')
 
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable attribute.')
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-class Exercise(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    ex_type = db.Column(db.String, nullable=False)
+@login_required
+@app.route('/view_logs')
+def view_logs
 
 @app.route('/')
 def index():

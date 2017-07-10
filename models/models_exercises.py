@@ -7,7 +7,12 @@ from .base import Base
 def serialize_datetime(d: datetime) -> str:
     return d.strftime("%Y-%m-%d %H:%M")
 
-class Swimming(Base):
+class Exercise():
+    @property
+    def exercise_date(self):
+        return self.created_at.strftime("%Y-%m-%d")
+
+class Swimming(Base, Exercise):
     __tablename__ = 'swimming'
 
     id = Column(Integer, primary_key=True)

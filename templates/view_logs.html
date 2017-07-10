@@ -3,4 +3,19 @@
 
 {% block contents %}
 
+{% if data == {} %}
+    <div>
+        <p>
+        No exercises recorded!
+        <p>
+    </div>
+{% else %}
+        {% for key in sorted(data.keys()) %}
+            <div>
+                <h5>{{ key }}</h5>
+            </div>
+            
+        {% endfor %}
+{% endif %}
+
 {% endblock %}

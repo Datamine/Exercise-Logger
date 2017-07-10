@@ -21,20 +21,27 @@ Bootstrap(app)
 @app.route('/view_logs')
 @login_required
 def view_logs():
-    exercises = [
-        Swimming
+    exercise_types = [
+        Swimming,
     ]
 
-    exercise_list = []
+    days_to_exercises_map = {}
 
-    for e in exercises:
-        exercise_list.extend(session.query(e).filter(e.user_id==current_user.id).all())
+    for e in exercise_types:
+        exercise_rows = session.query(e).filter(e.user_id==current_user.id).all()
+        for exercise_row in exercise_rows:
+            exercise_date = exercise_row.exercise_date
+            if exercise_date in days_to_exercises_map:
+                days_to_exercises_map[exercise_date].append(exercise_row.renderable_dict)
+            else:
+                days_to_exercises_map[exercise_date] = [exercise_row.renderable_dict]
+
 
     return render_template(
         'view_logs.html',
         title='View Logs',
         name='view_logs',
-        data=exercise_list
+        data=days_to_exercises_map,
     )
 
 

@@ -1,7 +1,7 @@
 from os import environ
 
 from flask_login import current_user, login_required, login_user, logout_user
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, jsonify
 from flask_bootstrap import Bootstrap
 
 from auth import login_manager
@@ -18,9 +18,10 @@ login_manager.init_app(app)
 Bootstrap(app)
 
 
-@app.route('/view_logs')
+@app.route('/request_logs')
 @login_required
-def view_logs():
+def request_logs():
+
     exercise_types = [
         Swimming,
     ]
@@ -36,12 +37,16 @@ def view_logs():
             else:
                 days_to_exercises_map[exercise_date] = [exercise_row.renderable_dict]
 
+    return jsonify(days_to_exercises_map)
 
+
+@app.route('/view_logs')
+@login_required
+def view_logs():
     return render_template(
         'view_logs.html',
         title='View Logs',
         name='view_logs',
-        data=days_to_exercises_map,
     )
 
 

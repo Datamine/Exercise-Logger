@@ -12,6 +12,14 @@ class Exercise():
     def exercise_date(self):
         return self.created_at.strftime("%Y-%m-%d")
 
+    @property
+    def exercise_time(self):
+        return self.created_at.strftime("%H:%M")
+
+    @property
+    def exercise_name(self):
+        return self.__tablename__.capitalize()
+
 class Swimming(Base, Exercise):
     __tablename__ = 'swimming'
 
@@ -29,7 +37,9 @@ class Swimming(Base, Exercise):
     @property
     def renderable_dict(self):
         return {
-            "created_at": serialize_datetime(self.created_at),
+            "created_date": self.exercise_date,
+            "created_time": self.exercise_time,
+            "exercise_name": self.exercise_name,
             "lanes": self.lanes,
             "length": self.length,
             "hours": self.hours,

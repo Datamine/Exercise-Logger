@@ -18,7 +18,7 @@ login_manager.init_app(app)
 Bootstrap(app)
 
 
-@app.route('/request_logs')
+@app.route('/api/request_logs')
 @login_required
 def request_logs():
 
@@ -47,6 +47,9 @@ def view_logs():
         'view_logs.html',
         title='View Logs',
         name='view_logs',
+        scripts=[
+            '/js/view_logs.js',
+        ]
     )
 
 
